@@ -17,9 +17,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='proto/date.proto',
   package='date',
   syntax='proto3',
-  serialized_options=None,
+  serialized_options=b'Z\010./datepb',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x10proto/date.proto\x12\x04\x64\x61te\"0\n\x04\x44\x61te\x12\x0c\n\x04year\x18\x01 \x01(\x05\x12\r\n\x05month\x18\x02 \x01(\x05\x12\x0b\n\x03\x64\x61y\x18\x03 \x01(\x05\x62\x06proto3'
+  serialized_pb=b'\n\x10proto/date.proto\x12\x04\x64\x61te\"0\n\x04\x44\x61te\x12\x0c\n\x04year\x18\x01 \x01(\x05\x12\r\n\x05month\x18\x02 \x01(\x05\x12\x0b\n\x03\x64\x61y\x18\x03 \x01(\x05\x42\nZ\x08./datepbb\x06proto3'
 )
 
 
@@ -81,4 +81,5 @@ Date = _reflection.GeneratedProtocolMessageType('Date', (_message.Message,), {
 _sym_db.RegisterMessage(Date)
 
 
+DESCRIPTOR._options = None
 # @@protoc_insertion_point(module_scope)

@@ -1,6 +1,7 @@
 syntax = "proto3";
-
 package date;
+option go_package = "datepb";
+
 /*
 *Date message
 */
