@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+package person;
+option go_package="protos";
+
+service PersonService{}
