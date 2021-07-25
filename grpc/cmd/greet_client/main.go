@@ -1,23 +1,35 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"log"
-
-	"github.com/chepkoyallan/protos/protos"
+	"github.com/chepkoyallan/protos/pkg/greet"
 	"google.golang.org/grpc"
+	"log"
 )
 
 func main() {
 	fmt.Println("Hello from greet client")
 	// create connection to the server
-	cc, err := grpc.Dial("localhost:500051", grpc.WithInsecure())
+	cc, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
 	if err != nil{
 		log.Fatalf("coluld not connect %v", err)
 	}
 
 	defer cc.Close()
 
-	c := protos.NewGreetServiceClient(cc)
-	fmt.Printf("Created Client: %f", c)
+
+
+	c := greet.NewGreetServiceClient(cc)
+	req := &greet.GreetRequest{
+		Greeting: &greet.Greeting{
+			FirstName: "Allan",
+			SecondName: "Chepkoy",
+		},
+	}
+	res, err := c.Greet(context.Background(),req)
+	if err != nil {
+		log.Fatalf("Error while calling the greet RPC: %v", err)
+	}
+	log.Printf("Responsee from greeting: %v", res.Result)
 }
