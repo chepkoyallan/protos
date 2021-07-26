@@ -5,7 +5,7 @@ get:
 	go get
 
 gen:
-	protoc --proto_path=. --go-grpc_out=/Users/allan/Documents/project/protos/grpc protos/greet.proto
+	protoc --proto_path=. --go-grpc_out=/Users/allanchepkoy/Documents/projects/rflow/protos/grpc protos/greet.proto
 
 gengrpc:
 	protoc --go_out=plugins=grpc:. protos/*.proto

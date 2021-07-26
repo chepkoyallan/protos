@@ -3,9 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"google.golang.org/grpc"
 	"log"
 	"net"
+	"strconv"
+	// "time"
+
+	"google.golang.org/grpc"
 
 	"github.com/chepkoyallan/protos/pkg/greet"
 	// "google.golang.org/grpc"
@@ -24,8 +27,23 @@ func (*server) Greet(ctx context.Context, req *greet.GreetRequest) (*greet.Greet
 
 }
 
+func (*server) GreetManyTimes(req *greet.GreetManyTimesRequest, stream greet.GreetService_GreetManyTimesServer) error {
+	fmt.Printf("GreetManyTime function invoked with %v", req)
+	firstName := req.GetGreeting().GetFirstName()
+	for i := 0; i < 10; i++ {
+		result := "Hello" + firstName + "number" + strconv.Itoa(i)
+		res := &greet.GreetManyTimesResponse{
+			Result: result,
+		}
+		stream.Send(res)
+		//time.Sleep(1000 * time.Millisecond)
+	}
+	return nil
+}
+
 func main() {
-	fmt.Println("Hello from greet server")
+	port := 50051
+	fmt.Printf("GRPC Server started at port: %v", port)
 
 	// 1. Write a listener
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")
