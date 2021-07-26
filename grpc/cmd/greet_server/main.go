@@ -3,9 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"strconv"
+
 	// "time"
 
 	"google.golang.org/grpc"
@@ -17,7 +19,7 @@ import (
 type server struct{}
 
 func (*server) Greet(ctx context.Context, req *greet.GreetRequest) (*greet.GreetResponse, error){
-	fmt.Printf("Greet function invoked with %v", req)
+	fmt.Printf("Greet function invoked with %v\n", req)
 	firstName := req.GetGreeting().GetFirstName()
 	result := "Hello " + firstName
 	res := &greet.GreetResponse{
@@ -28,7 +30,7 @@ func (*server) Greet(ctx context.Context, req *greet.GreetRequest) (*greet.Greet
 }
 
 func (*server) GreetManyTimes(req *greet.GreetManyTimesRequest, stream greet.GreetService_GreetManyTimesServer) error {
-	fmt.Printf("GreetManyTime function invoked with %v", req)
+	fmt.Printf("GreetManyTime function invoked with %v\n", req)
 	firstName := req.GetGreeting().GetFirstName()
 	for i := 0; i < 10; i++ {
 		result := "Hello " + firstName + " number" + strconv.Itoa(i)
@@ -41,9 +43,31 @@ func (*server) GreetManyTimes(req *greet.GreetManyTimesRequest, stream greet.Gre
 	return nil
 }
 
+func (*server) LongGreet(stream greet.GreetService_LongGreetServer) error {
+	fmt.Printf("Long greet function invoked with a streaming reqyest")
+	result := "Hello "
+
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			// finished reading client stream
+			return stream.SendAndClose(&greet.LongGreetResponse{
+				Result: result,
+			})
+
+		}
+		if err != nil {
+			log.Fatalf("error while reading client stream %v\n", err)
+		}
+
+		firstName := req.GetGreeting().GetFirstName()
+		result += firstName + "! "
+	}
+}
+
 func main() {
 	port := 50051
-	fmt.Printf("GRPC Server started at port: %v", port)
+	fmt.Printf("GRPC Server started at port: %v\n", port)
 
 	// 1. Write a listener
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")
