@@ -31,7 +31,7 @@ func (*server) GreetManyTimes(req *greet.GreetManyTimesRequest, stream greet.Gre
 	fmt.Printf("GreetManyTime function invoked with %v", req)
 	firstName := req.GetGreeting().GetFirstName()
 	for i := 0; i < 10; i++ {
-		result := "Hello" + firstName + "number" + strconv.Itoa(i)
+		result := "Hello " + firstName + " number" + strconv.Itoa(i)
 		res := &greet.GreetManyTimesResponse{
 			Result: result,
 		}
