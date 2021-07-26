@@ -16,21 +16,15 @@ func main() {
 	if err != nil{
 		log.Fatalf("coluld not connect %v", err)
 	}
-
 	defer cc.Close()
-
-
-
 	c := greet.NewGreetServiceClient(cc)
-
 	// unary
 	// doUnary(c)
 
 	//server Streaming
 	//doServerStreaming(c)
 	//doClientStreaming(c)
-	doBiDiStreaming(c)
-	
+	doBiDiStreaming(c)	
 }
 
 func doUnary(c greet.GreetServiceClient){
