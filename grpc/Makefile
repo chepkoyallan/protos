@@ -13,6 +13,9 @@ gengrpc:
 server:
 	go run cmd/person_server/main.go
 
+book:
+	go run cmd/book/main.go
+
 client:
 	go run cmd/person_client/main.go
 
