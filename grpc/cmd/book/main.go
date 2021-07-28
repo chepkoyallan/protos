@@ -15,12 +15,12 @@ var rnd = rand.New(rand.NewSource(time.Now().UnixNano()))
 func main(){
 	//Wait groups
 	wg := &sync.WaitGroup{}
-	m := &sync.Mutex{}
+	m := &sync.RWMutex{}
 
 	for i:=0; i < 10; i++ {
 		id := rnd.Intn(10) + 1
 		wg.Add(2)
-		go func(id int, wg *sync.WaitGroup, m *sync.Mutex){
+		go func(id int, wg *sync.WaitGroup, m *sync.RWMutex){
 			if b, ok := queryCache(id, m); ok {
 				fmt.Println("From Cache")
 				fmt.Println(b)
@@ -28,7 +28,7 @@ func main(){
 			}
 			wg.Done()
 		}(id, wg, m)
-		go func(id int, wg *sync.WaitGroup, m *sync.Mutex){
+		go func(id int, wg *sync.WaitGroup, m *sync.RWMutex){
 			if b, ok := queryDatabase(id, m); ok {
 				fmt.Println("From Database")
 				fmt.Println(b)
@@ -43,14 +43,14 @@ func main(){
 	
 }
 
-func queryCache(id int, m *sync.Mutex) (book.Book, bool){
-	m.Lock()
+func queryCache(id int, m *sync.RWMutex) (book.Book, bool){
+	m.RLock()
 	b, ok := cache[id]
-	m.Unlock()
+	m.RUnlock()
 	return b, ok
 }
 
-func queryDatabase(id int, m *sync.Mutex)(book.Book, bool){
+func queryDatabase(id int, m *sync.RWMutex)(book.Book, bool){
 	time.Sleep(100 * time.Millisecond)
 	for _, b := range book.Books {
 		if b.ID == id {
