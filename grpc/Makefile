@@ -16,6 +16,9 @@ server:
 book:
 	go run cmd/book/main.go
 
+channel:
+	go run cmd/chans/main.go
+
 client:
 	go run cmd/person_client/main.go
 
